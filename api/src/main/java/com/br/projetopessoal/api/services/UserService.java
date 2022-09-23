@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.br.projetopessoal.api.exceptions.ObjectNotFoundException;
 import com.br.projetopessoal.api.model.UserModel;
 import com.br.projetopessoal.api.repositories.UserRepository;
 
@@ -21,7 +22,7 @@ public class UserService {
 
     public UserModel findById(Integer id) {
         Optional<UserModel> userOptional = userRepository.findById(id);
-        return userOptional.orElse(null);
+        return userOptional.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
     }
 
 

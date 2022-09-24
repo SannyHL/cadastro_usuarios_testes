@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class UserDto {
     
+    private Integer id;
     @NotBlank
     private String name;
     @NotBlank

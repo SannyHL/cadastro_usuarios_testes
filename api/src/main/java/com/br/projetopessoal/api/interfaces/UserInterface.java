@@ -11,4 +11,5 @@ public interface UserInterface {
     UserModel findById(Integer id);
     List<UserModel> findAll();
     UserModel create(UserDto userDto);
+    UserModel update(UserDto userDto);
 }

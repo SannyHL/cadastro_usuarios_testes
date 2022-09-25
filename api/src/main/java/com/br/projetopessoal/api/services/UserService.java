@@ -42,11 +42,18 @@ public class UserService implements UserInterface{
     
     private void findByEmail(UserDto userDto){
         Optional<UserModel> userOptional = userRepository.findByEmail(userDto.getEmail());
-        if(userOptional.isPresent()){
+        // Se já tem o email no banco de dados e se o email cadastrado já tiver no banco de dados e for diferente do email do id passado.
+        if(userOptional.isPresent() && !userOptional.get().getId().equals(userDto.getId())){
             throw new DataIntegratyViolationException("Esse email já foi ultlizado, favor informar outro!");
         }
     }
 
+    @Override
+    public UserModel update(UserDto userDto) {
+        findByEmail(userDto);
+        return userRepository.save(mapper.map(userDto, UserModel.class));
+    }
+    
 
 
     

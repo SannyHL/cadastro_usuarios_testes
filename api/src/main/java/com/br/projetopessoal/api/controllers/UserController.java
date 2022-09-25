@@ -10,12 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.br.projetopessoal.api.dtos.UserDto;
+import com.br.projetopessoal.api.model.UserModel;
 import com.br.projetopessoal.api.services.UserService;
 
 @RestController
@@ -52,4 +54,9 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
     
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> update(@PathVariable(value = "id") Integer id, @RequestBody UserDto userDto){
+        userDto.setId(id);
+        return ResponseEntity.ok().body(mapper.map(service.update(userDto), UserDto.class));
+    }
 }

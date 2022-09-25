@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.br.projetopessoal.api.dtos.UserDto;
+import com.br.projetopessoal.api.exceptions.DataIntegratyViolationException;
 import com.br.projetopessoal.api.exceptions.ObjectNotFoundException;
 import com.br.projetopessoal.api.interfaces.UserInterface;
 import com.br.projetopessoal.api.model.UserModel;
@@ -34,9 +35,17 @@ public class UserService implements UserInterface{
 
     @Override
     public UserModel create(UserDto userDto) {
+        findByEmail(userDto);
         return userRepository.save(mapper.map(userDto, UserModel.class));
     }
 
+    
+    private void findByEmail(UserDto userDto){
+        Optional<UserModel> userOptional = userRepository.findByEmail(userDto.getEmail());
+        if(userOptional.isPresent()){
+            throw new DataIntegratyViolationException("Esse email já foi ultlizado, favor informar outro!");
+        }
+    }
 
 
 

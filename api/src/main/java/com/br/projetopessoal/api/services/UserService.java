@@ -53,6 +53,13 @@ public class UserService implements UserInterface{
         findByEmail(userDto);
         return userRepository.save(mapper.map(userDto, UserModel.class));
     }
+
+    @Override
+    public void delete(Integer id) {
+        findById(id);
+        userRepository.deleteById(id);;
+        
+    }
     
 
 

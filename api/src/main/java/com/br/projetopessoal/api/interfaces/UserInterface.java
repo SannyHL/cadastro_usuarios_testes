@@ -12,4 +12,5 @@ public interface UserInterface {
     List<UserModel> findAll();
     UserModel create(UserDto userDto);
     UserModel update(UserDto userDto);
+    void delete(Integer id);
 }

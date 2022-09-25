@@ -20,6 +20,7 @@ public class UserModel {
 
     private String name;
     @Email
+    @Column(unique = true)
     private String email;
     private String password;
 

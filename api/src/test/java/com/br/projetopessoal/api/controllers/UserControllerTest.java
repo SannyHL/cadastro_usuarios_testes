@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -66,8 +69,15 @@ public class UserControllerTest {
     }
 
     @Test
-    void testDelete() {
+    void whenDeleteThenReturnSuccess() {
+        doNothing().when(service).delete(anyInt());
 
+        ResponseEntity<UserDto> response = userController.delete(ID);
+
+        assertNotNull(response);
+        assertEquals(ResponseEntity.class, response.getClass());
+        verify(service, times(1)).delete(anyInt());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
     @Test
@@ -92,7 +102,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void whenFindByIdThenReturnSucess() {
+    void whenFindByIdThenReturnSuccess() {
         when(service.findById(anyInt())).thenReturn(user);
 
         when(mapper.map(any(), any())).thenReturn(userDto);
@@ -112,7 +122,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void whenUpdateThenReturnSucess() {
+    void whenUpdateThenReturnSuccess() {
         when(service.update(userDto)).thenReturn(user);
         when(mapper.map(any(), any())).thenReturn(userDto);
         ResponseEntity<UserDto> response = userController.update(ID, userDto);

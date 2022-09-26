@@ -2,9 +2,11 @@ package com.br.projetopessoal.api.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.yaml.snakeyaml.events.Event.ID;
 
 import com.br.projetopessoal.api.dtos.UserDto;
 import com.br.projetopessoal.api.exceptions.ObjectNotFoundException;
@@ -24,6 +27,7 @@ import com.br.projetopessoal.api.repositories.UserRepository;
 public class UserServiceTest {
 
     
+    private static final int INDEX = 0;
     private static final String PASSWORD = "123";
     private static final String EMAIL = "fernanda@gmail.com";
     private static final String NAME = "Fernanda";
@@ -48,8 +52,17 @@ public class UserServiceTest {
     }
 
     @Test
-    void testCreate() {
+    void whenCreateThenReturnSucess() {
+        when(userRepository.save(any())).thenReturn(user);
 
+        UserModel response = service.create(userDto);
+
+        assertNotNull(response);
+        assertEquals(UserModel.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
     }
 
     @Test
@@ -58,8 +71,18 @@ public class UserServiceTest {
     }
 
     @Test
-    void testFindAll() {
+    void whenFindAllReturnAnLisOftUser() {
+        when(userRepository.findAll()).thenReturn(List.of(user));
 
+        List<UserModel> response = service.findAll();
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(UserModel.class, response.get(INDEX).getClass());
+
+        assertEquals(ID, response.get(0).getId());
+        assertEquals(NAME, response.get(0).getName());
+        assertEquals(EMAIL, response.get(0).getEmail());
+        assertEquals(PASSWORD, response.get(0).getPassword());
     }
 
     @Test

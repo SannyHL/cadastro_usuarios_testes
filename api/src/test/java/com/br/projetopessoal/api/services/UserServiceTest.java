@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -17,8 +20,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.yaml.snakeyaml.events.Event.ID;
-
 import com.br.projetopessoal.api.dtos.UserDto;
 import com.br.projetopessoal.api.exceptions.DataIntegratyViolationException;
 import com.br.projetopessoal.api.exceptions.ObjectNotFoundException;
@@ -82,8 +83,24 @@ public class UserServiceTest {
     }
 
     @Test
-    void testDelete() {
+    void whenDeleteWithSucess() {
+        when(userRepository.findById(anyInt())).thenReturn(userOptional);
+        doNothing().when(userRepository).deleteById(anyInt());
+        service.delete(ID);
+        verify(userRepository, times(1)).deleteById(anyInt());
 
+    }
+
+    @Test
+    void deleteWithObjectNotFoundException(){
+        when(userRepository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+        try {
+            service.delete(ID);
+        } catch (Exception e) {
+            assertEquals(ObjectNotFoundException.class, e.getClass());
+            assertEquals("Objeto não encontrado", e.getMessage());
+            
+        }
     }
 
     @Test

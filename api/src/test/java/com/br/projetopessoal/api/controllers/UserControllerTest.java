@@ -22,8 +22,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.yaml.snakeyaml.events.Event.ID;
-
 import com.br.projetopessoal.api.dtos.UserDto;
 import com.br.projetopessoal.api.model.UserModel;
 import com.br.projetopessoal.api.services.UserService;

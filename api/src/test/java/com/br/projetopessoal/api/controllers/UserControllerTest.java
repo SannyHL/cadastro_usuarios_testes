@@ -2,6 +2,7 @@ package com.br.projetopessoal.api.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -50,7 +51,17 @@ public class UserControllerTest {
     }
 
     @Test
-    void testCreate() {
+    void whenCreateThenReturnCreated() {
+        when(service.create(any())).thenReturn(user);
+
+        ResponseEntity<UserDto> response = userController.create(userDto);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode()); 
+        assertNotNull(response);
+        assertNull(response.getBody());
+        assertNotNull(response.getHeaders().get("Location"));
+        assertEquals(ResponseEntity.class, response.getClass());
+
 
     }
 
@@ -101,7 +112,21 @@ public class UserControllerTest {
     }
 
     @Test
-    void testUpdate() {
+    void whenUpdateThenReturnSucess() {
+        when(service.update(userDto)).thenReturn(user);
+        when(mapper.map(any(), any())).thenReturn(userDto);
+        ResponseEntity<UserDto> response = userController.update(ID, userDto);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UserDto.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(EMAIL, response.getBody().getEmail());
+
 
     }
 

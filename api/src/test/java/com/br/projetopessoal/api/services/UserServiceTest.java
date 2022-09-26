@@ -127,10 +127,32 @@ public class UserServiceTest {
     }
 
     @Test
-    void testUpdate() {
+    void whenUpdateThenReturnSucess() {
+        when(userRepository.save(any())).thenReturn(user);
 
+        UserModel response = service.update(userDto);
+
+        assertNotNull(response);
+        assertEquals(UserModel.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
     }
 
+    @Test
+    void whenUpdateThenReturnDataIntegratyViolationException() {
+        when(userRepository.findByEmail(anyString())).thenReturn(userOptional);
+
+        try {
+            userOptional.get().setId(2);
+            service.create(userDto);
+        } catch (Exception e) {
+            assertEquals(DataIntegratyViolationException.class, e.getClass());
+            assertEquals("Esse email já foi ultlizado, favor informar outro!", e.getMessage());
+        }
+
+    }
 
     private void startUser(){
 

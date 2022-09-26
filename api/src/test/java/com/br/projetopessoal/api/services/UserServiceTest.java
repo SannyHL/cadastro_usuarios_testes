@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.yaml.snakeyaml.events.Event.ID;
 
 import com.br.projetopessoal.api.dtos.UserDto;
+import com.br.projetopessoal.api.exceptions.DataIntegratyViolationException;
 import com.br.projetopessoal.api.exceptions.ObjectNotFoundException;
 import com.br.projetopessoal.api.model.UserModel;
 import com.br.projetopessoal.api.repositories.UserRepository;
@@ -63,6 +65,20 @@ public class UserServiceTest {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
+    }
+    
+    @Test
+    void whenCreateThenReturnDataIntegratyViolationException() {
+        when(userRepository.findByEmail(anyString())).thenReturn(userOptional);
+
+        try {
+            userOptional.get().setId(2);
+            service.create(userDto);
+        } catch (Exception e) {
+            assertEquals(DataIntegratyViolationException.class, e.getClass());
+            assertEquals("Esse email já foi ultlizado, favor informar outro!", e.getMessage());
+        }
+
     }
 
     @Test

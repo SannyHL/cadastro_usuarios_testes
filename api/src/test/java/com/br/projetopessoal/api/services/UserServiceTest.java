@@ -43,8 +43,8 @@ public class UserServiceTest {
     @Mock
     private ModelMapper mapper;
 
-    private UserModel user;
-    private UserDto userDto;
+    private UserModel user = new UserModel();
+    private UserDto userDto = new UserDto();
     private Optional<UserModel> userOptional;
     
 

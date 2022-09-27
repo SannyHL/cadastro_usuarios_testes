@@ -12,8 +12,6 @@ Esse projeto tem como objetivo criar uma Api Rest para cadastro de usuários com
 
 ### **Razões para este projeto:**
 
-- Desenvolver mais habilidade sobre Spring Boot, integração com banco de dados e Query.
+- Desenvolver mais habilidade sobre testes unitarios com Junit5 e Mockito.
 
-
-#### ⚠Projeto em desenvolvimento
 
